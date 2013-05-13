@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-    <component name="ProjectModuleManager">
-        <modules>
-            <module fileurl="file://$PROJECT_DIR$/StormTweetsURLShortening.iml"
-                    filepath="$PROJECT_DIR$/StormTweetsURLShortening.iml"/>
-            <module fileurl="file://$PROJECT_DIR$/storm-unshortening.iml"
-                    filepath="$PROJECT_DIR$/storm-unshortening.iml"/>
-        </modules>
-    </component>
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/StormTweetsURLShortening.iml" filepath="$PROJECT_DIR$/StormTweetsURLShortening.iml" />
+    </modules>
+  </component>
 </project>
 

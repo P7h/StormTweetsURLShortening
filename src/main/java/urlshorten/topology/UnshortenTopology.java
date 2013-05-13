@@ -15,29 +15,29 @@ import urlshorten.spouts.TwitterSpout;
 public final class UnshortenTopology {
 
 	public static final void main(final String[] args) throws Exception {
-		final TopologyBuilder builder = new TopologyBuilder();
+		final TopologyBuilder topologyBuilder = new TopologyBuilder();
 
-		builder.setSpout("spout", new TwitterSpout(), 1);
+		topologyBuilder.setSpout("spout", new TwitterSpout(), 1);
 
-		builder.setBolt("unshortenBolt", new UnshortenBolt(), 4)
+		topologyBuilder.setBolt("unshortenBolt", new UnshortenBolt(), 4)
 				.shuffleGrouping("spout");
-		/*builder.setBolt("dbBolt", new CassandraBolt(), 2)
+		/*topologyBuilder.setBolt("dbBolt", new CassandraBolt(), 2)
 	         .shuffleGrouping("unshortenBolt");*/
 
-		final Config conf = new Config();
-		conf.setDebug(false);
+		final Config config = new Config();
+		config.setDebug(false);
 
 		//submit it to the cluster, or submit it locally
 		if (args != null && args.length > 0) {
-			conf.setNumWorkers(3);
+			config.setNumWorkers(3);
 
-			StormSubmitter.submitTopology(args[0], conf, builder.createTopology());
+			StormSubmitter.submitTopology(args[0], config, topologyBuilder.createTopology());
 		} else {
-			conf.setMaxTaskParallelism(10);
-			final LocalCluster cluster = new LocalCluster();
-			cluster.submitTopology("unshortening", conf, builder.createTopology());
-			Thread.sleep(50000);
-			cluster.shutdown();
+			config.setMaxTaskParallelism(10);
+			final LocalCluster localCluster = new LocalCluster();
+			localCluster.submitTopology("unshortening", config, topologyBuilder.createTopology());
+			Thread.sleep(100000);
+			localCluster.shutdown();
 		}
 	}
 }

@@ -1,5 +1,6 @@
 package urlshorten.bolts;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import twitter4j.Status;
 import twitter4j.URLEntity;
 import urlshorten.domain.UnShortMe;
+import urlshorten.utils.Constants;
 import urlshorten.utils.Utils;
 
 /**
@@ -32,37 +34,27 @@ public final class UnshortenBolt extends BaseRichBolt {
 
 	@Override
 	public final void execute(final Tuple tuple) {
-		final Status status = (Status) tuple.getValueByField("tweet");
+		final Status status = (Status) tuple.getValueByField(Constants.TWEET);
 		final URLEntity[] urls = status.getURLEntities();
-		/*
-		String shortURL;
-		String expandedURL;
-		for (URLEntity url : urls) {
-			shortURL = url.getURL();
-			expandedURL = Utils.unshortenIt(shortURL);
-			if (expandedURL != null) {//ouc.emit(new Values(shortURL, expandedURL));
-				LOGGER.info("Emitting: " + shortURL + ", " + expandedURL);
-			}
-		}*/
-		final List<UnShortMe> urlInfo = Utils.unshortenIt1(urls);
+		final List<UnShortMe> urlInfo = Utils.unshortenIt(urls);
 		UnShortMe unShortMe = null;
 		String requestedURL = null;
 		String resolvedURL = null;
-
-		for (int i = 0; i < urlInfo.size(); i++) {
-			unShortMe = urlInfo.get(i);
+		for (Iterator<UnShortMe> iterator = urlInfo.iterator(); iterator.hasNext(); ) {
+			unShortMe =  iterator.next();
 			requestedURL = unShortMe.getRequestedURL();
 			resolvedURL = unShortMe.getResolvedURL();
 			if (null != requestedURL && null != resolvedURL) {
-				//ouc.emit(new Values(unShortMe.getRequestedURL(), unShortMe.getResolvedURL()));
 				LOGGER.info("Emitting: " + requestedURL + ", " + resolvedURL);
+				//ouc.emit(new Values(requestedURL, resolvedURL));
 			}
 		}
+
 		ouc.ack(tuple);
 	}
 
 	@Override
 	public final void declareOutputFields(final OutputFieldsDeclarer declarer) {
-		//declarer.declare(new Fields("shortUrl", "expUrl"));
+//		declarer.declare(new Fields(Constants.SHORT_URL, Constants.EXPANDED_URL));
 	}
 }

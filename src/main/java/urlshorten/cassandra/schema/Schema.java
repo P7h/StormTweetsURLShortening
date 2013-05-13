@@ -12,18 +12,14 @@ import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
 import me.prettyprint.hector.api.ddl.ComparatorType;
 import me.prettyprint.hector.api.ddl.KeyspaceDefinition;
 import me.prettyprint.hector.api.factory.HFactory;
+import urlshorten.utils.Constants;
 
 /**
  * Database schema builds automatically if the keyspaces do not exist.
  *
  * @author Michael Vogiatzis
  */
-public class Schema {
-
-	private static final String TWEETS = "tw";
-	private static final String LINKS = "links";
-
-	private static final String SIMPLESTRATEGY = "org.apache.urlshorten.cassandra.locator.SimpleStrategy";
+public final class Schema {
 
 	private static int replFactor;
 	static String host;
@@ -33,36 +29,35 @@ public class Schema {
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {
+	public static final void main(final String[] args) {
 
-		Properties prop = new Properties();
+		final Properties prop = new Properties();
 		replFactor = 1;
 		try {
-			prop.load(Schema.class.getClassLoader().getResourceAsStream("config.properties"));
-			replFactor = Integer.valueOf(prop.getProperty("REPL_FACTOR"));
-			host = String.valueOf(prop.getProperty("HOST"));
-			clusterName = String.valueOf(prop.getProperty("CLUSTERNAME"));
+			prop.load(Schema.class.getClassLoader().getResourceAsStream(Constants.CONFIG_PROPERTIES_FILE));
+			replFactor = Integer.valueOf(prop.getProperty(Constants.REPL_FACTOR));
+			host = String.valueOf(prop.getProperty(Constants.HOST));
+			clusterName = String.valueOf(prop.getProperty(Constants.CLUSTERNAME));
 			System.out.println("Replication factor: " + replFactor);
 			System.out.println("Host: " + host);
 			System.out.println("Cluster name: " + clusterName);
 
-		} catch (Exception ex) {
+		} catch (final Exception ex) {
 			ex.printStackTrace();
 		}
 		cluster = HFactory.getOrCreateCluster(clusterName, host);
 
-		KeyspaceDefinition keyspaceDef = cluster.describeKeyspace(TWEETS);
+		KeyspaceDefinition keyspaceDef = cluster.describeKeyspace(Constants.TWEETS);
 
 		if (keyspaceDef == null) {
 			createTweetsTable();
 		}
 
-		keyspaceDef = cluster.describeKeyspace(LINKS);
+		keyspaceDef = cluster.describeKeyspace(Constants.LINKS);
 
 		if (keyspaceDef == null) {
 			createLinksTable();
 		}
-
 	}
 
 	private static void createTweetsTable() {
@@ -73,51 +68,50 @@ public class Schema {
 		final String CF_TWEET = "t";
 		final String QF_TEXT = "txt";
 
-		ColumnFamilyDefinition cfTweet = HFactory.createColumnFamilyDefinition(
-				                                                                      TWEETS, CF_TWEET, ComparatorType.UTF8TYPE);
+		final ColumnFamilyDefinition cfTweet = HFactory.createColumnFamilyDefinition(Constants.TWEETS,
+					CF_TWEET, ComparatorType.UTF8TYPE);
 		cfTweet.setKeyValidationClass(ComparatorType.LONGTYPE.getTypeName());
 
-		List<ColumnDefinition> tweetMetaData = new ArrayList<ColumnDefinition>();
+		final List<ColumnDefinition> tweetMetaData = new ArrayList<ColumnDefinition>();
 
-		BasicColumnDefinition t_txt = new BasicColumnDefinition();
+		final BasicColumnDefinition t_txt = new BasicColumnDefinition();
 		t_txt.setName(StringSerializer.get().toByteBuffer(QF_TEXT));
 		t_txt.setValidationClass(ComparatorType.UTF8TYPE.getClassName());
 		tweetMetaData.add(t_txt);
 		cfTweet.addColumnDefinition(t_txt);
 
-		List<ColumnFamilyDefinition> cfDefs = new ArrayList<ColumnFamilyDefinition>();
+		final List<ColumnFamilyDefinition> cfDefs = new ArrayList<ColumnFamilyDefinition>();
 		cfDefs.add(cfTweet);
 
-		KeyspaceDefinition tweetsDef = HFactory.createKeyspaceDefinition(
-				                                                                TWEETS, SIMPLESTRATEGY, replFactor, cfDefs);
+		final KeyspaceDefinition tweetsDef = HFactory.createKeyspaceDefinition(Constants. TWEETS,
+					Constants.SIMPLESTRATEGY, replFactor, cfDefs);
 
 		cluster.addKeyspace(tweetsDef);
 	}
 
-	private static void createLinksTable() {
+	private static final void createLinksTable() {
 		// column family l
 		final String CF_LINKS = "l";
 		final String QF_URL = "u";
 
-		ColumnFamilyDefinition cfLinks = HFactory.createColumnFamilyDefinition(
-				                                                                      LINKS, CF_LINKS, ComparatorType.UTF8TYPE);
+		final ColumnFamilyDefinition cfLinks = HFactory.createColumnFamilyDefinition(Constants.LINKS,
+					CF_LINKS, ComparatorType.UTF8TYPE);
 		cfLinks.setKeyValidationClass(ComparatorType.UTF8TYPE.getTypeName());
 
-		List<ColumnDefinition> linksMetaData = new ArrayList<ColumnDefinition>();
+		final List<ColumnDefinition> linksMetaData = new ArrayList<>();
 
-		BasicColumnDefinition twLinks = new BasicColumnDefinition();
+		final BasicColumnDefinition twLinks = new BasicColumnDefinition();
 		twLinks.setName(StringSerializer.get().toByteBuffer(QF_URL));
 		twLinks.setValidationClass(ComparatorType.UTF8TYPE.getClassName());
 		linksMetaData.add(twLinks);
 		cfLinks.addColumnDefinition(twLinks);
 
-		List<ColumnFamilyDefinition> cfDefs = new ArrayList<ColumnFamilyDefinition>();
+		final List<ColumnFamilyDefinition> cfDefs = new ArrayList<ColumnFamilyDefinition>();
 		cfDefs.add(cfLinks);
 
-		KeyspaceDefinition linksDef = HFactory.createKeyspaceDefinition(LINKS,
-				                                                               SIMPLESTRATEGY, replFactor, cfDefs);
+		final KeyspaceDefinition linksDef = HFactory.createKeyspaceDefinition(Constants.LINKS,
+					Constants.SIMPLESTRATEGY, replFactor, cfDefs);
 
 		cluster.addKeyspace(linksDef);
 	}
-
 }

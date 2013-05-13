@@ -3,11 +3,10 @@ package urlshorten.domain;
 import com.google.common.base.Objects;
 
 /**
- * Created with IntelliJ IDEA.
- * User: 078831
+ * POJO class for JSON reponse provided by Unshort.Me API.
+ * User: Prashanth Babu
  * Date: 5/13/13
  * Time: 12:36 AM
- * To change this template use File | Settings | File Templates.
  */
 public final class UnShortMe {
 	private String requestedURL;

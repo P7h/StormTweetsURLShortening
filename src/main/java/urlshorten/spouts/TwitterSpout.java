@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
+import urlshorten.utils.Constants;
 
 /**
  * Twitter spout connected to real-time stream. It stores tweet statuses to a queue
@@ -25,7 +26,7 @@ import twitter4j.conf.ConfigurationBuilder;
  */
 public final class TwitterSpout extends BaseRichSpout {
 
-	private static final Logger log = LoggerFactory.getLogger(TwitterSpout.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TwitterSpout.class);
 
 	private SpoutOutputCollector _collector;
 	private LinkedBlockingQueue<Status> queue = null;
@@ -37,7 +38,7 @@ public final class TwitterSpout extends BaseRichSpout {
 		queue = new LinkedBlockingQueue<>(1000);
 
 		//implement a listener for twitter statuses
-		final StatusListener listener = new StatusListener() {
+		final StatusListener statusListener = new StatusListener() {
 			public void onStatus(Status status) {
 				queue.offer(status);
 			}
@@ -62,22 +63,22 @@ public final class TwitterSpout extends BaseRichSpout {
 		};
 
 		//twitter stream authentication setup
-		final Properties prop = new Properties();
+		final Properties properties = new Properties();
 		try {
-			prop.load(TwitterSpout.class.getClassLoader().getResourceAsStream("config.properties"));
+			properties.load(TwitterSpout.class.getClassLoader().getResourceAsStream(Constants.CONFIG_PROPERTIES_FILE));
 		} catch (IOException e) {
-			log.error(e.toString());
+			LOGGER.error(e.toString());
 		}
 
 		final ConfigurationBuilder twitterConf = new ConfigurationBuilder();
 		twitterConf.setIncludeEntitiesEnabled(true);
 
-		twitterConf.setOAuthAccessToken(prop.getProperty("OATH_ACCESS_TOKEN"));
-		twitterConf.setOAuthAccessTokenSecret(prop.getProperty("OATH_ACCESS_TOKEN_SECRET"));
-		twitterConf.setOAuthConsumerKey(prop.getProperty("OATH_CONSUMER_KEY"));
-		twitterConf.setOAuthConsumerSecret(prop.getProperty("OATH_CONSUMER_SECRET"));
+		twitterConf.setOAuthAccessToken(properties.getProperty(Constants.OATH_ACCESS_TOKEN));
+		twitterConf.setOAuthAccessTokenSecret(properties.getProperty(Constants.OATH_ACCESS_TOKEN_SECRET));
+		twitterConf.setOAuthConsumerKey(properties.getProperty(Constants.OATH_CONSUMER_KEY));
+		twitterConf.setOAuthConsumerSecret(properties.getProperty(Constants.OATH_CONSUMER_SECRET));
 		final TwitterStream twitterStream = new TwitterStreamFactory(twitterConf.build()).getInstance();
-		twitterStream.addListener(listener);
+		twitterStream.addListener(statusListener);
 
 		// sample() method internally creates a thread which manipulates TwitterStream and calls
 		//the listener methods continuously.
@@ -86,20 +87,20 @@ public final class TwitterSpout extends BaseRichSpout {
 
 	@Override
 	public final void nextTuple() {
-		final Status ret = queue.poll();
-		Utils.sleep(200);
-		if (ret == null) {
+		final Status status = queue.poll();
+		Utils.sleep(250);
+		if (status == null) {
 			//if queue is empty sleep the spout thread so it doesn't consume resources
-			Utils.sleep(50);
+			Utils.sleep(500);
 		} else {
-			_collector.emit(new Values(ret));
-			//log.info(ret.getUser().getName() + " : " + ret.getText());
+			//LOGGER.info(status.getUser().getName() + " : " + status.getText());
+			_collector.emit(new Values(status));
 		}
 	}
 
 	@Override
 	public final void declareOutputFields(final OutputFieldsDeclarer declarer) {
-		declarer.declare(new Fields("tweet"));
+		declarer.declare(new Fields(Constants.TWEET));
 	}
 
 
