@@ -4,17 +4,18 @@
 Forked and updated from [Michael Vogiatzis's storm-unshortening] (https://github.com/mvogiatzis/storm-unshortening).<br>
 This repository contains an application which is built to demonstrate an example of Storm distributed framework.
 
-Storm was developed at BackType by Nathan Marz and team. It has been open sourced by Twitter [post Backtype acquisition] in August, 2011.<br>
-You can find more details about Storm [here] (http://storm-project.net).<br>
-This application is developed and tested with Storm v0.8.2 on CentOS, both on a virtual machine [local mode] and on Amazon EC2 environment [cluster mode]. 
-Application may or may not work with earlier or later versions than Storm v0.8.2.
+[Storm] (http://storm-project.net) was developed at BackType by Nathan Marz and team. It has been open sourced by Twitter [post Backtype acquisition] in August, 2011.<br>
+This application has developed and tested with Storm v0.8.2 on CentOS. Application may or may not work with earlier or later versions than Storm v0.8.2.<br>
+It has been tested in:
+- Local mode on a CentOS virtual machine and even on Microsoft Windows 7 box.
+- Cluster mode on a private cluster and also on Amazon EC2 environment of 4 machines and 5 machines respectively; with all of them running CentOS.
 
 ## Features
-* This application reads tweets from Twitter stream (using [Twitter4J] (http://twitter4j.org)) and in real-time unshortens the urls found in the tweets using 3rd party calls from [Unshort.me] (http://unshort.me).<br>
+* Application reads tweets from Twitter stream (using [Twitter4J] (http://twitter4j.org)) and in real-time unshortens the urls found in the tweets using 3rd party calls from [Unshort.me] (http://unshort.me).<br>
 * It logs the short-resolved url pairs to the console and also to a log file.<br>
 * It can also write the short-resolved url pairs into a urlshorten.cassandra table using [CassandraBolt] (src/main/java/urlshorten/bolts/CassandraBolt.java); currenly this functionality is commented out.<br>
-* I do have plans to update this codebase in few weeks time for storing the analyzed data to HBase as well using a HBase Bolt.
-* As of today, this codebase has very minimal comments. I will be adding more comments as and when I get relatively free in my day job.
+* I have plans to update this codebase in few weeks time for storing the analyzed data to HBase as well using a HBase Bolt.
+* As of today, this codebase has very minimal comments. I will be adding more comments as and when I get sometime.
 * Also this codebase has been made compatible both with Eclipse IDE and IntelliJ IDEA.
 
 ## Configuration
@@ -36,7 +37,7 @@ To build and run this topology, you must use Java 1.7.
 
 ### Local Mode:
 Local mode can also be run on Windows environment without installing any specific software or framework as such.<br>
-In local mode, this application can be run from command line by invoking the following command:<br>
+In local mode, this application can be run from command line by invoking:<br>
 
     mvn clean compile exec:java -Dexec.classpathScope=compile -Dexec.mainClass=urlshorten.topology.UnshortenTopology
 
@@ -51,9 +52,9 @@ In distributed mode, after starting Nimbus and Supervisors on individual machine
     storm jar target/StormTweetsURLShortening-1.0.0-SNAPSHOT-jar-with-dependencies.jar urlshorten.topology.UnshortenTopology UnshortenURLs
 
 ## Problems
-If you find any issues, please report them either raising an [issue] (https://github.com/P7h/StormTweetsURLShortening/issues) here on Github or alert me on my Twitter handle [@P7h] (http://twitter.com/P7h). OR even better, please send a [pull request] (https://github.com/P7h/StormTweetsURLShortening/pulls).
+If you find any issues, please report them either raising an [issue] (https://github.com/P7h/StormTweetsURLShortening/issues) here on Github or alert me on my Twitter handle [@P7h] (http://twitter.com/P7h). Or even better, please send a [pull request] (https://github.com/P7h/StormTweetsURLShortening/pulls).
 Appreciate your help. Thanks!
 
 ## License
-Copyright 2013 Prashanth Babu.
+Copyright 2013 Prashanth Babu.<br>testinbg
 Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0
