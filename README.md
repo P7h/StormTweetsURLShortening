@@ -54,7 +54,7 @@ In distributed mode, after starting Nimbus and Supervisors on individual machine
     storm jar target/StormTweetsURLUnShortening-1.0.0-SNAPSHOT-jar-with-dependencies.jar org.p7h.storm.urlshorten.topology.UnshortenTopology UnshortenURLs
 
 ## Problems
-If you find any issues, please report them either raising an [issue](https://github.com/P7h/StormTweetsUnURLShortening/issues) here on Github or alert me on my Twitter handle [@P7h](http://twitter.com/P7h). Or even better, please send a [pull request](https://github.com/P7h/StormTweetsURLUnShortening/pulls).
+If you find any issues, please report them either raising an [issue](https://github.com/P7h/StormTweetsURLUnShortening/issues) here on Github or alert me on my Twitter handle [@P7h](http://twitter.com/P7h). Or even better, please send a [pull request](https://github.com/P7h/StormTweetsURLUnShortening/pulls).
 Appreciate your help. Thanks!
 
 ## License
