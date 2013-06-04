@@ -1,4 +1,4 @@
-package urlshorten.cassandra.schema;
+package org.p7h.storm.urlshorten.cassandra.schema;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ import me.prettyprint.hector.api.ddl.ColumnFamilyDefinition;
 import me.prettyprint.hector.api.ddl.ComparatorType;
 import me.prettyprint.hector.api.ddl.KeyspaceDefinition;
 import me.prettyprint.hector.api.factory.HFactory;
-import urlshorten.utils.Constants;
+import org.p7h.storm.urlshorten.utils.Constants;
 
 /**
  * Database schema builds automatically if the keyspaces do not exist.

@@ -1,4 +1,4 @@
-package urlshorten.bolts;
+package org.p7h.storm.urlshorten.bolts;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -22,7 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Populates the urlshorten.cassandra tables.
+ * Populates the org.p7h.storm.urlshorten.urlshorten.cassandra tables.
  *
  * @author Michael Vogiatzis
  */
@@ -45,7 +45,7 @@ public final class CassandraBolt extends BaseRichBolt {
 			LOGGER.error(ex.toString());
 		}
 
-		//urlshorten.cassandra configuration
+		//org.p7h.storm.urlshorten.urlshorten.cassandra configuration
 		cluster = HFactory.getOrCreateCluster(
 				                                     prop.getProperty("CLUSTERNAME"), prop.getProperty("HOST"));
 		final ConfigurableConsistencyLevel ccl = new ConfigurableConsistencyLevel();
@@ -71,7 +71,7 @@ public final class CassandraBolt extends BaseRichBolt {
 
 
 	/**
-	 * Updates the urlshorten.cassandra table links with unshortened urls.
+	 * Updates the org.p7h.storm.urlshorten.urlshorten.cassandra table links with unshortened urls.
 	 *
 	 * @param shortUrl
 	 * @param expandedUrl

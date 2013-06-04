@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="output" path="/out/production/StormTweetsURLShortening"/>
+	<classpathentry kind="output" path="/out/production/StormTweetsURLUnShortening"/>
 </classpath>

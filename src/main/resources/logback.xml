@@ -22,7 +22,7 @@
 
     <logger name="twitter4j" level="ERROR"/>
     <logger name="backtype" level="ERROR"/>
-    <logger name="urlshorten" level="INFO"/>
+    <logger name="org.p7h.storm.urlshorten" level="INFO"/>
 
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>

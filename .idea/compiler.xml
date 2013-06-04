@@ -22,11 +22,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
-        <module name="StormTweetsURLShortening" />
+        <module name="StormTweetsURLUnShortening" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="StormTweetsURLShortening" target="1.7" />
+      <module name="StormTweetsURLUnShortening" target="1.7" />
     </bytecodeTargetLevel>
   </component>
 </project>

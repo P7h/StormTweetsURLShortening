@@ -46,7 +46,7 @@
     <logger name="backtype">
         <level value="ERROR"/>
     </logger>
-    <logger name="urlshorten">
+    <logger name="org.p7h.storm.urlshorten">
         <level value="INFO"/>
     </logger>
     <root>

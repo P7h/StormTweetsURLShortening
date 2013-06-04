@@ -1,14 +1,14 @@
-package urlshorten.topology;
+package org.p7h.storm.urlshorten.topology;
 
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
 import backtype.storm.StormSubmitter;
 import backtype.storm.topology.TopologyBuilder;
-import urlshorten.bolts.UnshortenBolt;
-import urlshorten.spouts.TwitterSpout;
+import org.p7h.storm.urlshorten.bolts.UnshortenBolt;
+import org.p7h.storm.urlshorten.spouts.TwitterSpout;
 
 /**
- * Orchestrates the elements and forms a urlshorten.topology to run the unshortening service.
+ * Orchestrates the elements and forms a org.p7h.storm.urlshorten.urlshorten.topology to run the unshortening service.
  *
  * @author Michael Vogiatzis
  */

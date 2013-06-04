@@ -1,4 +1,4 @@
-package urlshorten.utils;
+package org.p7h.storm.urlshorten.utils;
 
 /**
  * Constants used in this project.
@@ -21,6 +21,6 @@ public class Constants {
 	public static final String REPL_FACTOR = "REPL_FACTOR";
 	public static final String TWEETS = "tw";
 	public static final String LINKS = "links";
-	public static final String SIMPLESTRATEGY = "org.apache.urlshorten.cassandra.locator.SimpleStrategy";
+	public static final String SIMPLESTRATEGY = "org.apache.org.p7h.storm.urlshorten.urlshorten.cassandra.locator.SimpleStrategy";
 
 }

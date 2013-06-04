@@ -1,4 +1,4 @@
-package urlshorten.domain;
+package org.p7h.storm.urlshorten.domain;
 
 import com.google.common.base.Objects;
 

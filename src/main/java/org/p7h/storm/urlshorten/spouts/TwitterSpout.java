@@ -1,4 +1,4 @@
-package urlshorten.spouts;
+package org.p7h.storm.urlshorten.spouts;
 
 import java.io.IOException;
 import java.util.Map;
@@ -12,15 +12,15 @@ import backtype.storm.topology.base.BaseRichSpout;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
 import backtype.storm.utils.Utils;
+import org.p7h.storm.urlshorten.utils.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
-import urlshorten.utils.Constants;
 
 /**
  * Twitter spout connected to real-time stream. It stores tweet statuses to a queue
- * and emits them to the urlshorten.topology.
+ * and emits them to the org.p7h.storm.urlshorten.urlshorten.topology.
  *
  * @author Michael Vogiatzis
  */

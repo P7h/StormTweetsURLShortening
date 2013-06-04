@@ -1,4 +1,4 @@
-package urlshorten.utils;
+package org.p7h.storm.urlshorten.utils;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -8,10 +8,10 @@ import java.util.List;
 
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.p7h.storm.urlshorten.domain.UnShortMe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.URLEntity;
-import urlshorten.domain.UnShortMe;
 
 public final class Utils {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Utils.class);

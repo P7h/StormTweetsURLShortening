@@ -1,4 +1,4 @@
-package urlshorten.bolts;
+package org.p7h.storm.urlshorten.bolts;
 
 import java.util.Iterator;
 import java.util.List;
@@ -9,13 +9,13 @@ import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseRichBolt;
 import backtype.storm.tuple.Tuple;
+import org.p7h.storm.urlshorten.domain.UnShortMe;
+import org.p7h.storm.urlshorten.utils.Constants;
+import org.p7h.storm.urlshorten.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.Status;
 import twitter4j.URLEntity;
-import urlshorten.domain.UnShortMe;
-import urlshorten.utils.Constants;
-import urlshorten.utils.Utils;
 
 /**
  * Gets a Tweet status and emits shortened urls along with their expansion if any.
@@ -45,7 +45,8 @@ public final class UnshortenBolt extends BaseRichBolt {
 			requestedURL = unShortMe.getRequestedURL();
 			resolvedURL = unShortMe.getResolvedURL();
 			if (null != requestedURL && null != resolvedURL) {
-				LOGGER.info("Emitting: " + requestedURL + ", " + resolvedURL);
+				LOGGER.info("Emitting: " + requestedURL + " ==> " + resolvedURL);
+				//System.out.println("Emitting: " + requestedURL + " ==> " + resolvedURL);
 				//ouc.emit(new Values(requestedURL, resolvedURL));
 			}
 		}
