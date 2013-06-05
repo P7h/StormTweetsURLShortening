@@ -24,12 +24,13 @@ import twitter4j.URLEntity;
  */
 public final class UnshortenBolt extends BaseRichBolt {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UnshortenBolt.class);
-	private OutputCollector ouc;
+	private static final long serialVersionUID = 2095457286398178696L;
+	private OutputCollector outputCollector;
 
 	@Override
 	public final void prepare(final Map stormConf, final TopologyContext context,
-	                          final OutputCollector collector) {
-		ouc = collector;
+	                          final OutputCollector outputCollector) {
+		this.outputCollector = outputCollector;
 	}
 
 	@Override
@@ -46,12 +47,10 @@ public final class UnshortenBolt extends BaseRichBolt {
 			resolvedURL = unShortMe.getResolvedURL();
 			if (null != requestedURL && null != resolvedURL) {
 				LOGGER.info("Emitting: " + requestedURL + " ==> " + resolvedURL);
-				//System.out.println("Emitting: " + requestedURL + " ==> " + resolvedURL);
-				//ouc.emit(new Values(requestedURL, resolvedURL));
+				//outputCollector.emit(new Values(requestedURL, resolvedURL));
 			}
 		}
-
-		ouc.ack(tuple);
+		outputCollector.ack(tuple);
 	}
 
 	@Override

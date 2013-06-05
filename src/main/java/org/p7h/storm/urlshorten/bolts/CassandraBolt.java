@@ -22,12 +22,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Populates the org.p7h.storm.urlshorten.urlshorten.cassandra tables.
+ * Populates the Cassandra tables.
  *
  * @author Michael Vogiatzis
  */
 public final class CassandraBolt extends BaseRichBolt {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CassandraBolt.class);
+	private static final long serialVersionUID = -4118124437143733774L;
 	private static Cluster cluster;
 	private static Keyspace keyspace;
 	private static Mutator<String> mutator;

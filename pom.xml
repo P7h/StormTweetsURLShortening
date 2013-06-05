@@ -1,23 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
-    <groupId>StormTweetsURLUnShortening</groupId>
-    <artifactId>StormTweetsURLUnShortening</artifactId>
+    <groupId>org.p7h</groupId>
+    <artifactId>storm-tweets-url-unshortening</artifactId>
+    <version>0.1</version>
     <packaging>jar</packaging>
-    <version>1.0.0-SNAPSHOT</version>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <logback.version>1.0.13</logback.version>
-        <slf4j-log4j12.version>1.7.5</slf4j-log4j12.version>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <storm.version>0.8.2</storm.version>
-        <twitter4j-core.version>3.0.3</twitter4j-core.version>
+        <logback.version>1.0.13</logback.version>
+        <slf4j.version>1.7.5</slf4j.version>
+        <twitter4j.version>3.0.3</twitter4j.version>
         <jackson-mapper-asl.version>1.9.12</jackson-mapper-asl.version>
+        <guava.version>14.0.1</guava.version>
+        <hector-core.version>1.1-3</hector-core.version>
         <junit.version>4.11</junit.version>
+        <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
+        <maven-jdk-version>1.7</maven-jdk-version>
     </properties>
 
+    <url>http://www.P7h.org</url>
     <name>StormTweetsURLUnShortening</name>
-    <url>github.url</url>
+    <description>Application to demonstrate Storm distributed framework by unshortening the URLs present in Tweets in
+        real-time.</description>
 
     <build>
         <sourceDirectory>src/main/java</sourceDirectory>
@@ -26,7 +35,6 @@
                 <directory>${basedir}/src/main/resources</directory>
                 <includes>
                     <include>config.properties</include>
-                    <include>log4j.xml</include>
                     <include>logback.xml</include>
                 </includes>
             </resource>
@@ -55,19 +63,19 @@
                         </goals>
                     </execution>
                 </executions>
-
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>${maven-compiler-plugin.version}</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>${maven-jdk-version}</source>
+                    <target>${maven-jdk-version}</target>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
     <repositories>
         <repository>
             <id>github-releases</id>
@@ -88,27 +96,23 @@
             <releases>
                 <enabled>true</enabled>
             </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
         </repository>
         <repository>
             <id>codehaus-snapshots</id>
             <url>http://snapshots.repository.codehaus.org</url>
         </repository>
     </repositories>
-    <dependencies>
 
-        <!-- Uncomment the following dependency for complete debug logging downpour
+    <dependencies>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>${logback.version}</version>
-        </dependency>-->
+        </dependency>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j-log4j12.version}</version>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
         </dependency>
         <dependency>
             <groupId>storm</groupId>
@@ -119,20 +123,21 @@
                     <groupId>commons-logging</groupId>
                     <artifactId>commons-logging-api</artifactId>
                 </exclusion>
+                <!-- exclusion because of conflict with SLF4J and Logback -->
                 <exclusion>
                     <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
+                    <artifactId>slf4j-log4j12</artifactId>
                 </exclusion>
                 <exclusion>
-                    <groupId>log4j</groupId>
-                    <artifactId>log4j</artifactId>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
         <dependency>
             <groupId>org.twitter4j</groupId>
             <artifactId>twitter4j-core</artifactId>
-            <version>${twitter4j-core.version}</version>
+            <version>${twitter4j.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -151,15 +156,15 @@
         <dependency>
             <groupId>org.twitter4j</groupId>
             <artifactId>twitter4j-stream</artifactId>
-            <version>${twitter4j-core.version}</version>
+            <version>${twitter4j.version}</version>
             <exclusions>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging-api</artifactId>
-                </exclusion>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging-api</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>log4j</groupId>
@@ -180,7 +185,7 @@
         <dependency>
             <groupId>org.hectorclient</groupId>
             <artifactId>hector-core</artifactId>
-            <version>1.1-3</version>
+            <version>${hector-core.version}</version>
             <exclusions>
                 <!-- exclusion because of conflict with storm -->
                 <exclusion>
@@ -191,4 +196,3 @@
         </dependency>
     </dependencies>
 </project>
-

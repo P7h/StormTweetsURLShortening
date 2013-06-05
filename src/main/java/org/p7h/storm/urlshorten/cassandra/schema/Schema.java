@@ -47,7 +47,7 @@ public final class Schema {
 		}
 		cluster = HFactory.getOrCreateCluster(clusterName, host);
 
-		KeyspaceDefinition keyspaceDef = cluster.describeKeyspace(Constants.TWEETS);
+		KeyspaceDefinition keyspaceDef = cluster.describeKeyspace(Constants.TWEETS_CASSANDRA);
 
 		if (keyspaceDef == null) {
 			createTweetsTable();
@@ -68,7 +68,7 @@ public final class Schema {
 		final String CF_TWEET = "t";
 		final String QF_TEXT = "txt";
 
-		final ColumnFamilyDefinition cfTweet = HFactory.createColumnFamilyDefinition(Constants.TWEETS,
+		final ColumnFamilyDefinition cfTweet = HFactory.createColumnFamilyDefinition(Constants.TWEETS_CASSANDRA,
 					CF_TWEET, ComparatorType.UTF8TYPE);
 		cfTweet.setKeyValidationClass(ComparatorType.LONGTYPE.getTypeName());
 
@@ -83,7 +83,7 @@ public final class Schema {
 		final List<ColumnFamilyDefinition> cfDefs = new ArrayList<ColumnFamilyDefinition>();
 		cfDefs.add(cfTweet);
 
-		final KeyspaceDefinition tweetsDef = HFactory.createKeyspaceDefinition(Constants. TWEETS,
+		final KeyspaceDefinition tweetsDef = HFactory.createKeyspaceDefinition(Constants.TWEETS_CASSANDRA,
 					Constants.SIMPLESTRATEGY, replFactor, cfDefs);
 
 		cluster.addKeyspace(tweetsDef);

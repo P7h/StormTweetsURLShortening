@@ -3,9 +3,9 @@ package org.p7h.storm.urlshorten.utils;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.p7h.storm.urlshorten.domain.UnShortMe;
@@ -26,8 +26,8 @@ public final class Utils {
 		URL url = null;
 		URLConnection conn = null;
 		UnShortMe unShortMe = new UnShortMe();
-		final List<UnShortMe> urlInfo = new ArrayList<>();
-		final ObjectMapper mapper = new ObjectMapper();
+		final List<UnShortMe> urlInfo = Lists.newArrayList();
+		final ObjectMapper objectMapper = new ObjectMapper();
 		String requestedUrl = null;
 		StringBuilder constructedURL = new StringBuilder();
 		for (int i = 0; i < urls.length; i++) {
@@ -42,7 +42,7 @@ public final class Utils {
 				conn = url.openConnection();
 
 				//unshort.me returns an XML if invalid url is passed as an input
-				unShortMe = mapper.readValue(conn.getInputStream(), UnShortMe.class);
+				unShortMe = objectMapper.readValue(conn.getInputStream(), UnShortMe.class);
 				if (!unShortMe.isSuccess()) {
 					unShortMe.setResolvedURL(null);
 				}

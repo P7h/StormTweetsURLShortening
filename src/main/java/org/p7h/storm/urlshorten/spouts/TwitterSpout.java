@@ -19,28 +19,29 @@ import twitter4j.*;
 import twitter4j.conf.ConfigurationBuilder;
 
 /**
- * Twitter spout connected to real-time stream. It stores tweet statuses to a queue
- * and emits them to the org.p7h.storm.urlshorten.urlshorten.topology.
+ * Twitter spout connected to real-time stream. It stores tweet statuses to a _queue
+ * and emits them to the Topology.
  *
  * @author Michael Vogiatzis
  */
 public final class TwitterSpout extends BaseRichSpout {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TwitterSpout.class);
+	private static final long serialVersionUID = 3507709928459492702L;
 
 	private SpoutOutputCollector _collector;
-	private LinkedBlockingQueue<Status> queue = null;
+	private LinkedBlockingQueue<Status> _queue = null;
 
 	@Override
 	public final void open(final Map confMap, final TopologyContext context,
 	                       final SpoutOutputCollector collector) {
-		_collector = collector;
-		queue = new LinkedBlockingQueue<>(1000);
+		this._collector = collector;
+		this._queue = new LinkedBlockingQueue<>(1000);
 
 		//implement a listener for twitter statuses
 		final StatusListener statusListener = new StatusListener() {
 			public void onStatus(Status status) {
-				queue.offer(status);
+				_queue.offer(status);
 			}
 
 			public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
@@ -65,8 +66,9 @@ public final class TwitterSpout extends BaseRichSpout {
 		//twitter stream authentication setup
 		final Properties properties = new Properties();
 		try {
-			properties.load(TwitterSpout.class.getClassLoader().getResourceAsStream(Constants.CONFIG_PROPERTIES_FILE));
-		} catch (IOException e) {
+			properties.load(TwitterSpout.class.getClassLoader()
+					                .getResourceAsStream(Constants.CONFIG_PROPERTIES_FILE));
+		} catch (final IOException e) {
 			LOGGER.error(e.toString());
 		}
 
@@ -87,10 +89,10 @@ public final class TwitterSpout extends BaseRichSpout {
 
 	@Override
 	public final void nextTuple() {
-		final Status status = queue.poll();
+		final Status status = _queue.poll();
 		Utils.sleep(250);
 		if (status == null) {
-			//if queue is empty sleep the spout thread so it doesn't consume resources
+			//if _queue is empty sleep the spout thread so it doesn't consume resources
 			Utils.sleep(500);
 		} else {
 			//LOGGER.info(status.getUser().getName() + " : " + status.getText());
@@ -102,6 +104,4 @@ public final class TwitterSpout extends BaseRichSpout {
 	public final void declareOutputFields(final OutputFieldsDeclarer declarer) {
 		declarer.declare(new Fields(Constants.TWEET));
 	}
-
-
 }

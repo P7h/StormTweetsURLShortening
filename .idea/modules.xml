@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/StormTweetsURLUnShortening.iml" filepath="$PROJECT_DIR$/StormTweetsURLUnShortening.iml" />
+      <module fileurl="file://$PROJECT_DIR$/storm-tweets-url-unshortening.iml" filepath="$PROJECT_DIR$/storm-tweets-url-unshortening.iml" />
     </modules>
   </component>
 </project>

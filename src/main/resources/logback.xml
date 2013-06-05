@@ -22,6 +22,8 @@
 
     <logger name="twitter4j" level="ERROR"/>
     <logger name="backtype" level="ERROR"/>
+    <logger name="com.netflix.curator" level="ERROR"/>
+    <logger name="org.apache.zookeeper" level="ERROR"/>
     <logger name="org.p7h.storm.urlshorten" level="INFO"/>
 
     <root level="INFO">

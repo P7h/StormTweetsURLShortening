@@ -8,11 +8,12 @@ import org.p7h.storm.urlshorten.bolts.UnshortenBolt;
 import org.p7h.storm.urlshorten.spouts.TwitterSpout;
 
 /**
- * Orchestrates the elements and forms a org.p7h.storm.urlshorten.urlshorten.topology to run the unshortening service.
+ * Orchestrates the elements and forms a Topology to run the unshortening service.
  *
  * @author Michael Vogiatzis
  */
 public final class UnshortenTopology {
+	private static final String TOPOLOGY_NAME = "UnshortenURLs";
 
 	public static final void main(final String[] args) throws Exception {
 		final TopologyBuilder topologyBuilder = new TopologyBuilder();
@@ -34,10 +35,20 @@ public final class UnshortenTopology {
 			StormSubmitter.submitTopology(args[0], config, topologyBuilder.createTopology());
 		} else {
 			config.setMaxTaskParallelism(10);
+			config.setMessageTimeoutSecs(120);
 			final LocalCluster localCluster = new LocalCluster();
-			localCluster.submitTopology("unshortening", config, topologyBuilder.createTopology());
-			Thread.sleep(100000);
-			localCluster.shutdown();
+			localCluster.submitTopology(TOPOLOGY_NAME, config, topologyBuilder.createTopology());
+			//Sleep for 100 seconds
+			Thread.sleep(100 * 1000);
+
+			//Create a ShutdownHook for JVM so that we can kill and shutdown the Cluster gracefully.
+			Runtime.getRuntime().addShutdownHook(new Thread() {
+				@Override
+				public final void run() {
+					localCluster.killTopology(TOPOLOGY_NAME);
+					localCluster.shutdown();
+				}
+			});
 		}
 	}
 }

@@ -19,7 +19,7 @@ public class Constants {
 	public static final String CLUSTERNAME = "CLUSTERNAME";
 	public static final String HOST = "HOST";
 	public static final String REPL_FACTOR = "REPL_FACTOR";
-	public static final String TWEETS = "tw";
+	public static final String TWEETS_CASSANDRA = "tw";
 	public static final String LINKS = "links";
 	public static final String SIMPLESTRATEGY = "org.apache.org.p7h.storm.urlshorten.urlshorten.cassandra.locator.SimpleStrategy";
 
