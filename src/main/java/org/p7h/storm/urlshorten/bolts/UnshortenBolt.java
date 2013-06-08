@@ -24,13 +24,13 @@ import twitter4j.URLEntity;
  */
 public final class UnshortenBolt extends BaseRichBolt {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UnshortenBolt.class);
-	private static final long serialVersionUID = 2095457286398178696L;
-	private OutputCollector outputCollector;
+	private static final long serialVersionUID = -2645746161268111353L;
+	private OutputCollector _outputCollector;
 
 	@Override
 	public final void prepare(final Map stormConf, final TopologyContext context,
 	                          final OutputCollector outputCollector) {
-		this.outputCollector = outputCollector;
+		this._outputCollector = outputCollector;
 	}
 
 	@Override
@@ -38,19 +38,19 @@ public final class UnshortenBolt extends BaseRichBolt {
 		final Status status = (Status) tuple.getValueByField(Constants.TWEET);
 		final URLEntity[] urls = status.getURLEntities();
 		final List<UnShortMe> urlInfo = Utils.unshortenIt(urls);
-		UnShortMe unShortMe = null;
-		String requestedURL = null;
-		String resolvedURL = null;
-		for (Iterator<UnShortMe> iterator = urlInfo.iterator(); iterator.hasNext(); ) {
+		UnShortMe unShortMe;
+		String requestedURL;
+		String resolvedURL;
+		for (final Iterator<UnShortMe > iterator = urlInfo.iterator(); iterator.hasNext();) {
 			unShortMe =  iterator.next();
 			requestedURL = unShortMe.getRequestedURL();
 			resolvedURL = unShortMe.getResolvedURL();
 			if (null != requestedURL && null != resolvedURL) {
 				LOGGER.info("Emitting: " + requestedURL + " ==> " + resolvedURL);
-				//outputCollector.emit(new Values(requestedURL, resolvedURL));
+				//_outputCollector.emit(new Values(requestedURL, resolvedURL));
 			}
 		}
-		outputCollector.ack(tuple);
+		_outputCollector.ack(tuple);
 	}
 
 	@Override

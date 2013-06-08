@@ -25,40 +25,49 @@ public final class Utils {
 
 		URL url = null;
 		URLConnection conn = null;
-		UnShortMe unShortMe = new UnShortMe();
 		final List<UnShortMe> urlInfo = Lists.newArrayList();
 		final ObjectMapper objectMapper = new ObjectMapper();
 		String requestedUrl = null;
 		StringBuilder constructedURL = new StringBuilder();
+		UnShortMe unShortMe;
 		for (int i = 0; i < urls.length; i++) {
 			constructedURL.setLength(0);
 			requestedUrl = urls[i].getURL();
-			constructedURL.append("http://api.unshort.me/?r=")
+			constructedURL.append(Constants.API_UNSHORT_ME)
 					.append(requestedUrl)
 					.append("&t=json");
-			try {
-				url = new URL(constructedURL.toString());
-				//open URL connection
-				conn = url.openConnection();
-
-				//unshort.me returns an XML if invalid url is passed as an input
-				unShortMe = objectMapper.readValue(conn.getInputStream(), UnShortMe.class);
-				if (!unShortMe.isSuccess()) {
-					unShortMe.setResolvedURL(null);
-				}
-			} catch (final JsonParseException | MalformedURLException exception) {
-				unShortMe.setResolvedURL(null);
-				//unshort.me returns XML format in case of invalid URL, and it happens often.
-				LOGGER.error(exception.toString());
-			} catch (final Exception exception) {
-				unShortMe.setResolvedURL(null);
-				//usually Http Response code 503
-				LOGGER.error(exception.toString());
-			}
+			unShortMe = resolveURLs(objectMapper, constructedURL);
 			urlInfo.add(unShortMe);
 		}
 
 		return urlInfo;
 	}
-}
 
+	private static final UnShortMe resolveURLs(final ObjectMapper objectMapper,
+	                                     final StringBuilder constructedURL) {
+		final URL url;
+		final URLConnection conn;
+		UnShortMe unShortMe = new UnShortMe();
+
+		try {
+			url = new URL(constructedURL.toString());
+			//open URL connection
+			conn = url.openConnection();
+
+			//unshort.me returns an XML if invalid url is passed as an input
+			unShortMe = objectMapper.readValue(conn.getInputStream(), UnShortMe.class);
+			if (!unShortMe.isSuccess()) {
+				unShortMe.setResolvedURL(null);
+			}
+		} catch (final JsonParseException | MalformedURLException exception) {
+			unShortMe.setResolvedURL(null);
+			//unshort.me returns XML format in case of invalid URL, and it happens often.
+			LOGGER.error(exception.toString());
+		} catch (final Exception exception) {
+			unShortMe.setResolvedURL(null);
+			//usually Http Response code 503
+			LOGGER.error(exception.toString());
+		}
+		return unShortMe;
+	}
+}

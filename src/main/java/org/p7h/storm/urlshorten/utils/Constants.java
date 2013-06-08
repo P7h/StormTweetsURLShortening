@@ -8,6 +8,7 @@ package org.p7h.storm.urlshorten.utils;
  * To change this template use File | Settings | File Templates.
  */
 public class Constants {
+	public static final String TOPOLOGY_NAME = "UnshortenURLs";
 	public static final String CONFIG_PROPERTIES_FILE = "config.properties";
 	public static final String  OATH_ACCESS_TOKEN = "OATH_ACCESS_TOKEN";
 	public static final String OATH_ACCESS_TOKEN_SECRET = "OATH_ACCESS_TOKEN_SECRET";
@@ -21,6 +22,7 @@ public class Constants {
 	public static final String REPL_FACTOR = "REPL_FACTOR";
 	public static final String TWEETS_CASSANDRA = "tw";
 	public static final String LINKS = "links";
-	public static final String SIMPLESTRATEGY = "org.apache.org.p7h.storm.urlshorten.urlshorten.cassandra.locator.SimpleStrategy";
+	public static final String SIMPLESTRATEGY = "org.apache.org.p7h.storm.urlshorten.cassandra.locator.SimpleStrategy";
 
+	public static final String API_UNSHORT_ME = "http://api.unshort.me/?r=";
 }

@@ -27,10 +27,11 @@ import twitter4j.conf.ConfigurationBuilder;
 public final class TwitterSpout extends BaseRichSpout {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TwitterSpout.class);
-	private static final long serialVersionUID = 3507709928459492702L;
+	private static final long serialVersionUID = 3189251362566074681L;
 
-	private SpoutOutputCollector _collector;
+	private SpoutOutputCollector _collector = null;
 	private LinkedBlockingQueue<Status> _queue = null;
+	private TwitterStream _twitterStream = null;
 
 	@Override
 	public final void open(final Map confMap, final TopologyContext context,
@@ -38,7 +39,6 @@ public final class TwitterSpout extends BaseRichSpout {
 		this._collector = collector;
 		this._queue = new LinkedBlockingQueue<>(1000);
 
-		//implement a listener for twitter statuses
 		final StatusListener statusListener = new StatusListener() {
 			public void onStatus(Status status) {
 				_queue.offer(status);
@@ -63,39 +63,44 @@ public final class TwitterSpout extends BaseRichSpout {
 			}
 		};
 
-		//twitter stream authentication setup
+		//Twitter stream authentication setup
 		final Properties properties = new Properties();
 		try {
 			properties.load(TwitterSpout.class.getClassLoader()
 					                .getResourceAsStream(Constants.CONFIG_PROPERTIES_FILE));
-		} catch (final IOException e) {
-			LOGGER.error(e.toString());
+		} catch (final IOException exception) {
+			//Should not occur. If it does, we cant continue. So exiting the program!
+			LOGGER.error(exception.toString());
+			System.exit(1);
 		}
 
-		final ConfigurationBuilder twitterConf = new ConfigurationBuilder();
-		twitterConf.setIncludeEntitiesEnabled(true);
+		//Twitter stream authentication setup
+		final ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
+		configurationBuilder.setIncludeEntitiesEnabled(true);
 
-		twitterConf.setOAuthAccessToken(properties.getProperty(Constants.OATH_ACCESS_TOKEN));
-		twitterConf.setOAuthAccessTokenSecret(properties.getProperty(Constants.OATH_ACCESS_TOKEN_SECRET));
-		twitterConf.setOAuthConsumerKey(properties.getProperty(Constants.OATH_CONSUMER_KEY));
-		twitterConf.setOAuthConsumerSecret(properties.getProperty(Constants.OATH_CONSUMER_SECRET));
-		final TwitterStream twitterStream = new TwitterStreamFactory(twitterConf.build()).getInstance();
-		twitterStream.addListener(statusListener);
+		configurationBuilder.setOAuthAccessToken(properties.getProperty(Constants.OATH_ACCESS_TOKEN));
+		configurationBuilder.setOAuthAccessTokenSecret(properties.getProperty(Constants.OATH_ACCESS_TOKEN_SECRET));
+		configurationBuilder.setOAuthConsumerKey(properties.getProperty(Constants.OATH_CONSUMER_KEY));
+		configurationBuilder.setOAuthConsumerSecret(properties.getProperty(Constants.OATH_CONSUMER_SECRET));
+		_twitterStream = new TwitterStreamFactory(configurationBuilder.build()).getInstance();
+		_twitterStream.addListener(statusListener);
 
-		// sample() method internally creates a thread which manipulates TwitterStream and calls
-		//the listener methods continuously.
-		twitterStream.sample();
+		//Returns a small random sample of all public statuses.
+		_twitterStream.sample();
+	}
+
+	@Override
+	public final void close() {
+		_twitterStream.shutdown();
 	}
 
 	@Override
 	public final void nextTuple() {
 		final Status status = _queue.poll();
-		Utils.sleep(250);
-		if (status == null) {
-			//if _queue is empty sleep the spout thread so it doesn't consume resources
+		if (null == status) {
+			//If _queue is empty sleep the spout thread so it doesn't consume resources.
 			Utils.sleep(500);
 		} else {
-			//LOGGER.info(status.getUser().getName() + " : " + status.getText());
 			_collector.emit(new Values(status));
 		}
 	}

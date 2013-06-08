@@ -2,16 +2,17 @@
 ----------
 
 ## Introduction
-Forked and updated from [Michael Vogiatzis's storm-unshortening](https://github.com/mvogiatzis/storm-unshortening).<br>
 This repository contains an application which is built to demonstrate an example of Storm distributed framework by unshortening the URLs present in Tweets in real-time.
 
-[Storm](http://storm-project.net) is a free and open source distributed realtime computation system, developed at BackType by Nathan Marz and team. It has been open sourced by Twitter [post BackType acquisition] in August, 2011.<br>
+[Storm](http://storm-project.net) is a free and open source distributed real-time computation system, developed at BackType by Nathan Marz and team. It has been open sourced by Twitter [post BackType acquisition] in August, 2011.<br>
 This application has been developed and tested with Storm v0.8.2 on CentOS. Application may or may not work with earlier or later versions than Storm v0.8.2.<br>
 
 This application has been tested in:
 
 + Local mode on a CentOS virtual machine and even on Microsoft Windows 7 machine.
 + Cluster mode on a private cluster and also on Amazon EC2 environment of 4 machines and 5 machines respectively; with all the machines in private cluster running Ubuntu while EC2 environment machines were powered by CentOS.
+
+Forked and updated from [Michael Vogiatzis's storm-unshortening](https://github.com/mvogiatzis/storm-unshortening).<br>
 
 ## Features
 * Application retrieves tweets from Twitter stream (using [Twitter4J](http://twitter4j.org)) and in real-time unshortens the urls found in the tweets using 3rd party calls from [Unshort.me](http://unshort.me).<br>
@@ -22,7 +23,15 @@ This application has been tested in:
 * Also this project has been made compatible with both Eclipse IDE and IntelliJ IDEA. Import the project in your favorite IDE [which has Maven plugin installed] and you can quickly follow the code.
 
 ## Configuration
-Please check the [`config.properties`](src/main/resources/config.properties) and add your own values and complete the integration of Twitter API to your application by looking at your values from [Twitter Developer Page](https://dev.twitter.com/apps). If you did not create a Twitter App before, then please create a new Twitter App where you will get all the required values of `config.properties` afresh and then populate them here without any mistake.<br>
+Please check the [`config.properties`](src/main/resources/config.properties) and add your own values and complete the integration of Twitter API to your application by looking at your values from [Twitter Developer Page](https://dev.twitter.com/apps).<br>
+If you did not create a Twitter App before, then please create a new Twitter App where you will get all the required values of `config.properties` afresh and then populate them here without any mistake.<br>
+
+## Dependencies
+* Storm v0.8.2
+* Twitter4J v3.0.3
+* Google Guava v14.0.1
+* SLF4J v1.7.5
+* Logback v1.0.13
 
 Also, please check [`pom.xml`](pom.xml) for more information on the various dependencies of the project.<br>
 
@@ -32,6 +41,7 @@ You need the following on your machine:
 
 * Oracle JDK >= 1.7.x
 * Apache Maven >= 3.0.5
+* Clone this repo and import as an existing Maven project to either Eclipse IDE or IntelliJ IDEA.
 * Requires ZooKeeper, JZMQ, ZeroMQ installed and configured in case of executing this project in distributed mode i.e. Storm Cluster.<br>
 	- Follow the steps mentioned [here](https://github.com/nathanmarz/storm/wiki/Setting-up-a-Storm-cluster) for more details on setting up a Storm Cluster.<br>
 
@@ -41,7 +51,7 @@ Rest of the required frameworks and libraries are downloaded by Maven as require
 To build and run this topology, you must use Java 1.7.
 
 ### Local Mode:
-Local mode can also be run on Windows environment without installing any specific software or framework as such. Please be sure to clear your temp folder as it adds lot of temporary files in every run.<br>
+Local mode can also be run on Windows environment without installing any specific software or framework as such. Please be sure to clean your temp folder as it adds lot of temporary files in every run.<br>
 In local mode, this application can be run from command line by invoking:<br>
 
     mvn clean compile exec:java -Dexec.classpathScope=compile -Dexec.mainClass=org.p7h.storm.urlshorten.topology.UnshortenTopology
