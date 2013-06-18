@@ -2,10 +2,11 @@
 ----------
 
 ## Introduction
-This repository contains an application which is built to demonstrate an example of Storm distributed framework by unshortening the URLs present in Tweets in real-time.
+This repository contains an application which is built to demonstrate an example of Storm distributed framework by unshortening the URLs present in Tweets in real-time. This Topology endlessly by retrieving tweets, computes and resolves the shorter URLs to their original URLs continuously i.e. till the time the topology is killed. User has to explicitly kill the topology for exiting the application.
 
 [Storm](http://storm-project.net) is a free and open source distributed real-time computation system, developed at BackType by Nathan Marz and team. It has been open sourced by Twitter [post BackType acquisition] in August, 2011.<br>
-This application has been developed and tested with Storm v0.8.2 on CentOS. Application may or may not work with earlier or later versions than Storm v0.8.2.<br>
+
+This application has been developed and tested with Storm v0.8.2 on Windows 7 in local mode. Application may or may not work with earlier or later versions than Storm v0.8.2.<br>
 
 This application has been tested in:
 
@@ -17,9 +18,8 @@ Forked and updated from [Michael Vogiatzis's storm-unshortening](https://github.
 ## Features
 * Application retrieves tweets from Twitter stream (using [Twitter4J](http://twitter4j.org)) and in real-time unshortens the urls found in the tweets using 3rd party calls from [Unshort.me](http://unshort.me).<br>
 * After processing, the application logs the short and its resolved url pairs to the console and also to a log file.<br>
-* It can also write the short-resolved url pairs into a Cassandra table using [`CassandraBolt`](src/main/java/org/p7h/storm/urlshorten/bolts/CassandraBolt.java); currently this functionality is commented out.<br>
+* It can also write the short-resolved url pairs into a Cassandra table using [`CassandraBolt`](src/main/java/org/p7h/storm/urlshorten/bolts/CassandraBolt.java); currently this functionality is [commented out](src/main/java/org/p7h/storm/urlshorten/UnshortenTopology.java#L29-30).<br>
 * I have plans to update this codebase in few weeks time for storing the analyzed data to HBase as well using a HBase Bolt.
-* As of current day, this codebase has very minimal or almost no comments. I will be adding more comments as and when I get time.
 * Also this project has been made compatible with both Eclipse IDE and IntelliJ IDEA. Import the project in your favorite IDE [which has Maven plugin installed] and you can quickly follow the code.
 
 ## Configuration

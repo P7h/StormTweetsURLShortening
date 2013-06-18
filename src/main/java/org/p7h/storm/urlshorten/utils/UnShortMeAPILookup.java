@@ -13,44 +13,55 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.URLEntity;
 
-public final class Utils {
-	private static final Logger LOGGER = LoggerFactory.getLogger(Utils.class);
+/**
+ * Utility class which looks up UnshortMe API with the requested short URL for Unshorten / resolved URL.
+ *
+ * @author Prashanth Babu
+ */
+public final class UnShortMeAPILookup {
+	private static final Logger LOGGER = LoggerFactory.getLogger(UnShortMeAPILookup.class);
 
 	/**
-	 * Method which hits Unshort.Me thru API request and gets and parses the JSON response.
-	 * @param urls -- URLEntities
+	 * Hits Unshort.Me thru API request and gets and parses the JSON response.
+	 *
+	 * @param urlEntities -- URLEntities
 	 * @return List of UnShortMe Objects.
 	 */
-	public static List<UnShortMe> unshortenIt(final URLEntity[] urls) {
+	public static List<UnShortMe> unshortenIt(final URLEntity[] urlEntities) {
 
-		URL url = null;
-		URLConnection conn = null;
 		final List<UnShortMe> urlInfo = Lists.newArrayList();
 		final ObjectMapper objectMapper = new ObjectMapper();
-		String requestedUrl = null;
-		StringBuilder constructedURL = new StringBuilder();
+		final StringBuilder constructedURL = new StringBuilder();
+		String requestedUrl;
 		UnShortMe unShortMe;
-		for (int i = 0; i < urls.length; i++) {
+		for (int i = 0; i < urlEntities.length; i++) {
 			constructedURL.setLength(0);
-			requestedUrl = urls[i].getURL();
+			requestedUrl = urlEntities[i].getURL();
 			constructedURL.append(Constants.API_UNSHORT_ME)
 					.append(requestedUrl)
 					.append("&t=json");
-			unShortMe = resolveURLs(objectMapper, constructedURL);
+			unShortMe = resolveURLsFromJSON(objectMapper, constructedURL.toString());
 			urlInfo.add(unShortMe);
 		}
 
 		return urlInfo;
 	}
 
-	private static final UnShortMe resolveURLs(final ObjectMapper objectMapper,
-	                                     final StringBuilder constructedURL) {
+	/**
+	 * Unmarshall the JSON Response to a POJO for unshortening the URLs.
+	 *
+	 * @param objectMapper ObjectMapper
+	 * @param constructedURL UnShortMe API URL we have to access
+	 * @return unmarshalled POJO
+	 */
+	private static final UnShortMe resolveURLsFromJSON(final ObjectMapper objectMapper,
+	                                                   final String constructedURL) {
 		final URL url;
 		final URLConnection conn;
 		UnShortMe unShortMe = new UnShortMe();
 
 		try {
-			url = new URL(constructedURL.toString());
+			url = new URL(constructedURL);
 			//open URL connection
 			conn = url.openConnection();
 

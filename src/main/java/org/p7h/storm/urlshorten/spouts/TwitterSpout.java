@@ -68,9 +68,9 @@ public final class TwitterSpout extends BaseRichSpout {
 		try {
 			properties.load(TwitterSpout.class.getClassLoader()
 					                .getResourceAsStream(Constants.CONFIG_PROPERTIES_FILE));
-		} catch (final IOException exception) {
+		} catch (final IOException ioException) {
 			//Should not occur. If it does, we cant continue. So exiting the program!
-			LOGGER.error(exception.toString());
+			LOGGER.error(ioException.getMessage(), ioException);
 			System.exit(1);
 		}
 
@@ -91,6 +91,7 @@ public final class TwitterSpout extends BaseRichSpout {
 
 	@Override
 	public final void close() {
+		_twitterStream.cleanUp();
 		_twitterStream.shutdown();
 	}
 
@@ -101,7 +102,13 @@ public final class TwitterSpout extends BaseRichSpout {
 			//If _queue is empty sleep the spout thread so it doesn't consume resources.
 			Utils.sleep(500);
 		} else {
-			_collector.emit(new Values(status));
+			//Reduce the noise.
+			//Emit only those tweets which have URLs.
+			final URLEntity[] urlEntities = status.getURLEntities();
+			if(null != urlEntities && 0 < urlEntities.length) {
+				//Emit the complete tweet with URL Entities
+				_collector.emit(new Values(status));
+			}
 		}
 	}
 

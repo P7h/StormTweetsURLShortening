@@ -2,12 +2,9 @@ package org.p7h.storm.urlshorten.utils;
 
 /**
  * Constants used in this project.
- * User: Prashanth Babu
- * Date: 5/13/13
- * Time: 5:33 AM
- * To change this template use File | Settings | File Templates.
+ * @author  Prashanth Babu
  */
-public class Constants {
+public final class Constants {
 	public static final String TOPOLOGY_NAME = "UnshortenURLs";
 	public static final String CONFIG_PROPERTIES_FILE = "config.properties";
 	public static final String OAUTH_ACCESS_TOKEN = "OAUTH_ACCESS_TOKEN";

@@ -11,16 +11,17 @@ import backtype.storm.topology.base.BaseRichBolt;
 import backtype.storm.tuple.Tuple;
 import org.p7h.storm.urlshorten.domain.UnShortMe;
 import org.p7h.storm.urlshorten.utils.Constants;
-import org.p7h.storm.urlshorten.utils.Utils;
+import org.p7h.storm.urlshorten.utils.UnShortMeAPILookup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import twitter4j.Status;
 import twitter4j.URLEntity;
 
 /**
- * Gets a Tweet status and emits shortened urls along with their expansion if any.
+ * Gets a Tweet status and emits shortened urls along with their expansion.
  *
  * @author Michael Vogiatzis
+ * @author Prashanth Babu
  */
 public final class UnshortenBolt extends BaseRichBolt {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UnshortenBolt.class);
@@ -36,8 +37,8 @@ public final class UnshortenBolt extends BaseRichBolt {
 	@Override
 	public final void execute(final Tuple tuple) {
 		final Status status = (Status) tuple.getValueByField(Constants.TWEET);
-		final URLEntity[] urls = status.getURLEntities();
-		final List<UnShortMe> urlInfo = Utils.unshortenIt(urls);
+		final URLEntity[] urlEntities = status.getURLEntities();
+		final List<UnShortMe> urlInfo = UnShortMeAPILookup.unshortenIt(urlEntities);
 		UnShortMe unShortMe;
 		String requestedURL;
 		String resolvedURL;
@@ -46,7 +47,7 @@ public final class UnshortenBolt extends BaseRichBolt {
 			requestedURL = unShortMe.getRequestedURL();
 			resolvedURL = unShortMe.getResolvedURL();
 			if (null != requestedURL && null != resolvedURL) {
-				LOGGER.info("Emitting: " + requestedURL + " ==> " + resolvedURL);
+				LOGGER.info("\t{} ==> {}", requestedURL, resolvedURL);
 				//_outputCollector.emit(new Values(requestedURL, resolvedURL));
 			}
 		}
