@@ -11,6 +11,7 @@ public final class Constants {
 	public static final String OAUTH_ACCESS_TOKEN_SECRET = "OAUTH_ACCESS_TOKEN_SECRET";
 	public static final String OAUTH_CONSUMER_KEY = "OAUTH_CONSUMER_KEY";
 	public static final String OAUTH_CONSUMER_SECRET = "OAUTH_CONSUMER_SECRET";
+	public static final String UNSHORT_ME_API_KEY = "UNSHORT_ME_API_KEY";
 	public static final String TWEET = "tweet";
 	public static final String SHORT_URL = "shortUrl";
 	public static final String EXPANDED_URL = "expUrl";
@@ -21,5 +22,6 @@ public final class Constants {
 	public static final String LINKS = "links";
 	public static final String SIMPLESTRATEGY = "org.apache.org.p7h.storm.urlshorten.cassandra.locator.SimpleStrategy";
 
-	public static final String API_UNSHORT_ME = "http://api.unshort.me/?r=";
+//	public static final String API_UNSHORT_ME = "http://api.unshort.me/?r=";
+	public static final String API_UNSHORT_ME = "http://api.unshort.me/unshorten/v2/?r=";
 }

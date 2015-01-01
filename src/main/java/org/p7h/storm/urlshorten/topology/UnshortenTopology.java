@@ -4,6 +4,7 @@ import backtype.storm.Config;
 import backtype.storm.LocalCluster;
 import backtype.storm.StormSubmitter;
 import backtype.storm.topology.TopologyBuilder;
+import backtype.storm.utils.Utils;
 import org.p7h.storm.urlshorten.bolts.UnshortenBolt;
 import org.p7h.storm.urlshorten.spouts.TwitterSpout;
 import org.p7h.storm.urlshorten.utils.Constants;
@@ -43,14 +44,12 @@ public final class UnshortenTopology {
 			final LocalCluster localCluster = new LocalCluster();
 			localCluster.submitTopology(Constants.TOPOLOGY_NAME, config, topologyBuilder.createTopology());
 
-			/*
 			//Run this topology for 120 seconds so that we can complete processing of decent # of tweets.
 			Utils.sleep(120 * 1000);
 
 			LOGGER.info("Shutting down the cluster...");
 			localCluster.killTopology(Constants.TOPOLOGY_NAME);
 			localCluster.shutdown();
-			*/
 
 			//Create a ShutdownHook for JVM so that cluster is shutdown gracefully when the JVM exits.
 			Runtime.getRuntime().addShutdownHook(new Thread() {

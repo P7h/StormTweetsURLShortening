@@ -1,6 +1,6 @@
 package org.p7h.storm.urlshorten.domain;
 
-import com.google.common.base.Objects;
+import com.google.common.base.MoreObjects;
 
 /**
  * POJO class for JSON reponse provided by Unshort.Me API.
@@ -43,7 +43,7 @@ public final class UnShortMe {
 	 */
 	@Override
 	public final String toString() {
-		return Objects.toStringHelper(this)
+		return MoreObjects.toStringHelper(this)
 				       .add("requestedURL", requestedURL)
 				       .add("success", success)
 				       .add("resolvedURL", resolvedURL)
